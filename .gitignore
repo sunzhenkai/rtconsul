@@ -1,0 +1,4 @@
+.idea
+3rd_party
+cmake-build*
+**.swp
