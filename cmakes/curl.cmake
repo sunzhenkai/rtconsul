@@ -1,7 +1,7 @@
-#message(STATUS "hello ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}")
 include(ExternalProject)
+include(${CMAKE_CURRENT_LIST_DIR}/utils.cmake)
 
-set(target openssl)
+set(target curl)
 string(REPLACE ";" "|" T_CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}")
 set(CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=Release
@@ -10,18 +10,13 @@ set(CMAKE_ARGS
         -DBUILD_STATIC_LIB=ON
         -DBUILD_SHARED_LIB=OFF)
 ExternalProject_Add(
-        spdlog_build
+        ${target}_build
         GIT_REPOSITORY https://gitee.com/mirrors/curl.git
         GIT_TAG curl-7_81_0
-        DEPENDS openssl
+        DEPENDS openssl::ssl
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --with-openssl
         LIST_SEPARATOR |
         CMAKE_ARGS ${CMAKE_ARGS}
 )
 
-
-add_library(${target} STATIC IMPORTED GLOBAL)
-set_target_properties(${target} PROPERTIES
-        IMPORTED_LOCATION "${DEPS_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}${target}${CMAKE_STATIC_LIBRARY_SUFFIX}"
-        INCLUDE_DIRECTORIES ${DEPS_INCLUDE_DIR})
-add_dependencies(${target} ${target}_build)
+AddLibrary(${target} PREFIX ${DEPS_PREFIX} DEP ${target}_build SUBMODULES ${target})

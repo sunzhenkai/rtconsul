@@ -1,5 +1,5 @@
-#message(STATUS "hello ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}")
 include(ExternalProject)
+include(${CMAKE_CURRENT_LIST_DIR}/utils.cmake)
 
 set(target openssl)
 set(CMAKE_ARGS
@@ -9,14 +9,13 @@ set(CMAKE_ARGS
         -DBUILD_SHARED_LIB=OFF)
 ExternalProject_Add(
         ${target}_build
-        GIT_REPOSITORY https://gitee.com/mirrors/openssl.git
+        GIT_REPOSITORY https://github.com/openssl/openssl.git
         GIT_TAG openssl-3.0.1
-        CONFIGURE_COMMAND <SOURCE_DIR>/Configure --prefix=${DEPS_PREFIX} --openssldir=${DEPS_PREFIX} '-Wl,-rpath,$(LIBRPATH)'
+        CONFIGURE_COMMAND <SOURCE_DIR>/Configure --prefix=${DEPS_PREFIX} --openssldir=${DEPS_PREFIX}
         CMAKE_ARGS ${CMAKE_ARGS}
 )
 
-add_library(${target}::${target} STATIC IMPORTED GLOBAL)
-set_target_properties(${target}::${target} PROPERTIES
-        IMPORTED_LOCATION "${DEPS_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}${target}${CMAKE_STATIC_LIBRARY_SUFFIX}"
-        INCLUDE_DIRECTORIES ${DEPS_INCLUDE_DIR})
-add_dependencies(${target}::${target} ${target}_build)
+AddLibrary(${target}
+        PREFIX ${DEPS_PREFIX}
+        DEP ${target}_build
+        SUBMODULES ssl crypto)

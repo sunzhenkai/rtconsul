@@ -10,6 +10,8 @@ list(APPEND CMAKE_PREFIX_PATH ${DEPS_PREFIX})
 
 include(cmakes/spdlog.cmake)
 include(cmakes/openssl.cmake)
+include(cmakes/curl.cmake)
 
 add_executable(test tests/unit/test.cpp)
-target_link_libraries(test spdlog::spdlog openssl::openssl)
+target_link_libraries(test PUBLIC spdlog::spdlog openssl::ssl)
+target_include_directories(test PUBLIC spdlog::spdlog)
