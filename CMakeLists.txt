@@ -6,6 +6,8 @@ include_directories(include)
 
 include(external/utils.cmake)
 include(external/spdlog/check.cmake)
+include(external/openssl/check.cmake)
+include(external/curl/check.cmake)
 
 add_executable(test tests/unit/test.cpp)
 target_link_libraries(test PUBLIC spdlog::spdlog)
