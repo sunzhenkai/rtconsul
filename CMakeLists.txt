@@ -9,10 +9,13 @@ include(external/spdlog/check.cmake)
 include(external/openssl/check.cmake)
 include(external/curl/check.cmake)
 
+aux_source_directory(src SRCS_DIRS)
 aux_source_directory(src/constants SRCS_DIRS)
 aux_source_directory(src/factory SRCS_DIRS)
 aux_source_directory(src/model SRCS_DIRS)
 aux_source_directory(src/service SRCS_DIRS)
+aux_source_directory(src/http SRCS_DIRS)
+aux_source_directory(src/utils SRCS_DIRS)
 
 set(EXTRA spdlog::spdlog
         openssl::ssl
