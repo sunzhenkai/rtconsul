@@ -11,4 +11,8 @@ namespace rtcfg {
     typedef std::list<String> SList;
 }
 
+#ifndef GET_OR_DEFAULT
+#define GET_OR_DEFAULT(dest, m, key, dft) auto it = (m).find(key); (dest) = it == (m).end() ? (dft) : it->second
+#endif //GET_OR_DEFAULT
+
 #endif //RTCFG_DEFINES_H

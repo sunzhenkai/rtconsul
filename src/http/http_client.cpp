@@ -1,7 +1,27 @@
 #include "http/http_client.h"
 #include "curl/curl.h"
+#include "cstring"
+#include "spdlog/spdlog.h"
+#include "exceptions.h"
 
 namespace rtcfg {
+    static size_t WriteCallback(void *ptr, size_t size, size_t nmemb, void *user_data) {
+        size_t bts = size * nmemb;
+        auto *r = (HTTPResult *) user_data;
+        r->content.append((char *) ptr, bts);
+        return bts;
+    }
+
+    static size_t ReadHeaderCallback(void *ptr, size_t size, size_t nmemb, void *user_data) {
+        char *content = (char *) ptr;
+        char *pos = strchr(content, ':');
+        if (pos != nullptr) { // ignore status
+            auto *r = (HTTPResult *) user_data;
+            r->headers.emplace(String(content, pos - content), String(pos + 1));
+        }
+        return size * nmemb;
+    }
+
     HTTPClient::HTTPClient() {
         pthread_key_create(&pthread_key_, HTTPClient::DestroyCurlHandler);
     }
@@ -14,7 +34,7 @@ namespace rtcfg {
         }
     }
 
-    CURL *HTTPClient::GetCurlHandler() {
+    CURL *HTTPClient::GetCurlHandler() const {
         CURL *curl_handler = pthread_getspecific(pthread_key_);
         if (curl_handler == nullptr) {
             curl_handler = curl_easy_init();
@@ -36,9 +56,35 @@ namespace rtcfg {
         SList assembled_headers = AssembleHeaders(headers);
         curl_easy_reset(curl_handler);
         curl_easy_setopt(curl_handler, CURLOPT_URL, url.c_str());
+
+        HTTPResult r;
         SetBasicOpts(curl_handler);
 
-        // TODO here
+        curl_easy_setopt(curl_handler, CURLOPT_TIMEOUT_MS, timeout);
+        curl_easy_setopt(curl_handler, CURLOPT_WRITEDATA, (void *) &r);
+        curl_easy_setopt(curl_handler, CURLOPT_HEADERDATA, (void *) &r);
+
+        struct curl_slist *header_list = nullptr;
+        for (auto &it: assembled_headers) {
+            header_list = curl_slist_append(header_list, it.c_str());
+        }
+        if (header_list != nullptr) {
+            curl_easy_setopt(curl_handler, CURLOPT_HEADER, header_list);
+        }
+
+        curl_res = curl_easy_perform(curl_handler);
+        if (header_list != nullptr) {
+            curl_slist_free_all(header_list);
+        }
+
+        if (curl_res != CURLE_OK) {
+            spdlog::error("[HTTPClient]-Get:curl_easy_perform() failed: {} - {}",
+                          curl_res, curl_easy_strerror(curl_res));
+            throw NetworkException(curl_res, curl_easy_strerror(curl_res));
+        }
+
+        curl_easy_getinfo(curl_handler, CURLINFO_RESPONSE_CODE, &r.code);
+        return r;
     }
 
     void HTTPClient::InitCurl() {
@@ -71,11 +117,11 @@ namespace rtcfg {
     }
 
     void HTTPClient::SetBasicOpts(CURL *curl_handler) {
+        curl_easy_setopt(curl_handler, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl_handler, CURLOPT_HEADERFUNCTION, ReadHeaderCallback);
         curl_easy_setopt(curl_handler, CURLOPT_TCP_KEEPALIVE, 1L);
-
         /* keep-alive idle time to 120 seconds */
         curl_easy_setopt(curl_handler, CURLOPT_TCP_KEEPIDLE, 120L);
-
         /* interval time between keep-alive probes: 60 seconds */
         curl_easy_setopt(curl_handler, CURLOPT_TCP_KEEPINTVL, 60L);
     }

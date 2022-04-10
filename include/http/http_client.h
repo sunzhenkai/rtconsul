@@ -13,7 +13,7 @@ namespace rtcfg {
     public:
         HTTPClient();
 
-        CURL *GetCurlHandler();
+        CURL *GetCurlHandler() const;
 
         HTTPResult Get(const String &path, SSMap &headers, SSMap &params, long timeout);
 

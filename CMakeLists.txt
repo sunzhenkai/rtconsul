@@ -16,14 +16,19 @@ aux_source_directory(src/model SRCS_DIRS)
 aux_source_directory(src/service SRCS_DIRS)
 aux_source_directory(src/http SRCS_DIRS)
 aux_source_directory(src/utils SRCS_DIRS)
+aux_source_directory(src/consul/service SRCS_DIRS)
 
 set(EXTRA spdlog::spdlog
+        curl::curl
         openssl::ssl
         openssl::crypto
-        curl::curl)
+        pthread
+        z
+        dl
+        m)
 
 
-add_executable(test tests/unit/test.cpp)
+add_executable(test tests/unit/test.cpp ${SRCS_DIRS})
 target_link_libraries(test ${EXTRA})
 
 add_executable(example examples/example.cpp ${SRCS_DIRS})
