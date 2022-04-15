@@ -4,9 +4,12 @@
 #include "defines.h"
 
 namespace rtcfg {
-    static String KEY_PROTOCOL = "protocol";
-    static String KEY_HOST = "host";
-    static String KEY_CONSUL = "consul";
+    extern const String KEY_PROTOCOL;
+    extern const String KEY_HOST;
+    extern const String KEY_CONSUL;
+
+    extern const String CONSUL_DEFAULT_URL;
+    extern const String CONSUL_KV_PREFIX;
 }
 
 

@@ -2,7 +2,7 @@
 
 namespace rtcfg::consul {
     String ConsulKVService::Get(const String &key) {
-        return "hello";
+        return consul.GetKV(key);
     }
 
     String ConsulKVService::Cache(const String &key) {
@@ -10,6 +10,5 @@ namespace rtcfg::consul {
     }
 
     void ConsulKVService::Subscribe(const String &key, Listener *listener) {
-
     }
 }

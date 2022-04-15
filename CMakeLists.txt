@@ -16,6 +16,7 @@ aux_source_directory(src/model SRCS_DIRS)
 aux_source_directory(src/service SRCS_DIRS)
 aux_source_directory(src/http SRCS_DIRS)
 aux_source_directory(src/utils SRCS_DIRS)
+aux_source_directory(src/consul/client SRCS_DIRS)
 aux_source_directory(src/consul/service SRCS_DIRS)
 
 set(EXTRA spdlog::spdlog

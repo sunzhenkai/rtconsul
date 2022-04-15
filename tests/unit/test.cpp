@@ -4,12 +4,13 @@
 using namespace rtcfg;
 
 int main() {
+    spdlog::set_level(spdlog::level::debug);
     SSMap properties{
             {"protocol", "consul"},
     };
-    String key = "foo";
     ConfigServicePtr cs = RTCFG::GetConfigService(properties);
-    auto value = cs->Get(key);
-    spdlog::info("key: {}, value: {}", key, value);
+    String key = "foo";
+    spdlog::info("key: {}, value: {}", key, cs->Get(key));
+    spdlog::info("key: {}, value: {}", key, cs->Cache(key));
     return 0;
 }

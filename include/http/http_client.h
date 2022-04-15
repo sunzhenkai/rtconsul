@@ -9,24 +9,18 @@
 
 namespace rtcfg {
     class HTTPClient {
+        static SSMap EMPTY_MAP;
         pthread_key_t pthread_key_{};
     public:
         HTTPClient();
-
-        CURL *GetCurlHandler() const;
-
-        HTTPResult Get(const String &path, SSMap &headers, SSMap &params, long timeout);
-
-        static void DestroyCurlHandler(void *arg);
-
+        HTTPResult Get(const String &path, SSMap &headers = EMPTY_MAP, SSMap &params = EMPTY_MAP, long timeout = 5);
         static void InitCurl();
-
         static void CleanUp();
-
+    private:
+        CURL *GetCurlHandler() const;
+        static void DestroyCurlHandler(void *arg);
         static String EncodingParams(SSMap &params);
-
         static SList AssembleHeaders(SSMap &headers);
-
         static void SetBasicOpts(CURL *curl_handler);
     };
 }

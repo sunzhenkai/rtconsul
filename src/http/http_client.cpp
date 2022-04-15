@@ -26,6 +26,8 @@ namespace rtcfg {
         pthread_key_create(&pthread_key_, HTTPClient::DestroyCurlHandler);
     }
 
+    SSMap HTTPClient::EMPTY_MAP{};
+
     void HTTPClient::DestroyCurlHandler(void *arg) {
         CURL *curl_handler = reinterpret_cast<CURL *>(arg);
         if (curl_handler != nullptr) {
@@ -55,6 +57,7 @@ namespace rtcfg {
 
         SList assembled_headers = AssembleHeaders(headers);
         curl_easy_reset(curl_handler);
+        spdlog::debug("[HTTPClient]-Get: url. [url={}]", url);
         curl_easy_setopt(curl_handler, CURLOPT_URL, url.c_str());
 
         HTTPResult r;
