@@ -4,6 +4,8 @@
 #include "string"
 #include "unordered_map"
 #include "list"
+#include "mutex"
+#include "shared_mutex"
 
 namespace rtcfg {
     typedef std::string String;
@@ -11,6 +13,11 @@ namespace rtcfg {
     using Map = std::unordered_map<K, V>;
     typedef Map<String, String> SSMap;
     typedef std::list<String> SList;
+    using Mutex = std::mutex;
+    using SMutex = std::shared_mutex;
+    using Lock = std::lock_guard<Mutex>;
+    using SLock = std::shared_lock<SMutex>;
+    using ULock = std::shared_lock<SMutex>;
 }
 
 #ifndef GET_OR_DEFAULT

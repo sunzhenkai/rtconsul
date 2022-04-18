@@ -6,15 +6,19 @@
 #include "listener/listener.h"
 
 namespace rtcfg {
+    template<typename CacheValue>
     class ConfigService {
     public:
         virtual String Get(const String &key) = 0;
-        virtual String Cache(const String &key) = 0;
+        virtual CacheValue Cache(const String &key) = 0;
+        virtual void DiscardCache(const String &key) = 0;
         virtual void Subscribe(const String &key, Listener *listener) = 0;
+        virtual void Unsubscribe(const String &key, Listener *listener) = 0;
         virtual ~ConfigService() = default;
     };
 
-    typedef std::shared_ptr<ConfigService> ConfigServicePtr;
+    template<typename CacheValue>
+    using ConfigServicePtr = std::shared_ptr<ConfigService<CacheValue>>;
 }
 
 

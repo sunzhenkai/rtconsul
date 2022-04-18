@@ -8,9 +8,10 @@ int main() {
     SSMap properties{
             {"protocol", "consul"},
     };
-    ConfigServicePtr cs = RTCFG::GetConfigService(properties);
+    consul::ConsulKVService cs = RTCFG::GetConsulKVService(properties);
     String key = "foo";
-    spdlog::info("key: {}, value: {}", key, cs->Get(key));
-    spdlog::info("key: {}, value: {}", key, cs->Cache(key));
+    spdlog::info("key: {}, value: {}", key, cs.Get(key));
+    auto watcher = cs.Cache(key);
+    spdlog::info("key: {}, data: {}", watcher->GetKey(), watcher->GetData().Size());
     return 0;
 }

@@ -8,6 +8,7 @@ include(external/utils.cmake)
 include(external/spdlog/check.cmake)
 include(external/openssl/check.cmake)
 include(external/curl/check.cmake)
+include(external/json/check.cmake)
 
 aux_source_directory(src SRCS_DIRS)
 aux_source_directory(src/constants SRCS_DIRS)
@@ -18,8 +19,10 @@ aux_source_directory(src/http SRCS_DIRS)
 aux_source_directory(src/utils SRCS_DIRS)
 aux_source_directory(src/consul/client SRCS_DIRS)
 aux_source_directory(src/consul/service SRCS_DIRS)
+aux_source_directory(src/consul/model SRCS_DIRS)
 
 set(EXTRA spdlog::spdlog
+        json::json
         curl::curl
         openssl::ssl
         openssl::crypto
