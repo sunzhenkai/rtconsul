@@ -32,10 +32,6 @@ set(EXTRA spdlog::spdlog
         dl
         m)
 
-
-add_executable(test tests/unit/test.cpp ${SRCS_DIRS})
-target_link_libraries(test ${EXTRA})
-
 add_executable(example examples/example.cpp ${SRCS_DIRS})
 target_link_libraries(example ${EXTRA})
 
@@ -45,3 +41,9 @@ install(TARGETS rtcfg-static LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
         DESTINATION include/rtcfg
         FILES_MATCHING PATTERN "*.h*")
+
+add_executable(test tests/unit/test.cpp ${SRCS_DIRS})
+target_link_libraries(test ${EXTRA})
+
+add_executable(test_thread tests/unit/test_thread.cpp ${SRCS_DIRS})
+target_link_libraries(test_thread ${EXTRA})

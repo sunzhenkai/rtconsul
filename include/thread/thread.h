@@ -4,6 +4,7 @@
 #include <csignal>
 #include <utility>
 #include "defines.h"
+#include "atomic"
 
 #define CUSTOM_STOP_SIGNAL SIGUSR1
 
@@ -15,9 +16,9 @@ namespace rtcfg {
         String name_;
         ThreadFn fn_{};
         void *data_{};
-        bool start_{false};
+        std::atomic<bool> start_{false};
         Thread() = default;
-        TID_T tid_;
+        tid_t tid_{};
 
         static void empty_signal_handler(int signum) {};
         static struct sigaction old_action;
@@ -25,11 +26,10 @@ namespace rtcfg {
         Thread(String name, ThreadFn fn, void *data = nullptr) : name_(std::move(name)), fn_(fn), data_(data) {}
         static void Init();
         static void Reset();
-        static void Run(void *param);
+        static void *Run(void *param);
         void Start();
         void Join();
         void Kill();
-        void SetThreadName(const String &name);
         String GetThreadName();
     };
 }

@@ -18,7 +18,7 @@ namespace rtcfg {
     using Lock = std::lock_guard<Mutex>;
     using SLock = std::shared_lock<SMutex>;
     using ULock = std::shared_lock<SMutex>;
-    typedef unsigned long long TID_T;
+    typedef unsigned long int tid_t;
 }
 
 #ifndef GET_OR_DEFAULT
