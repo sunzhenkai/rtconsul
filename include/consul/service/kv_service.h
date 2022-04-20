@@ -5,7 +5,6 @@
 #include "listener/listener.h"
 #include "service/config_service.h"
 #include "consul/client/consul_client.h"
-#include "consul/kv/data_watcher.h"
 #include "consul/kv/kv_watcher.h"
 #include "consul/model/consul_kv.h"
 #include "utils/safe_map.h"

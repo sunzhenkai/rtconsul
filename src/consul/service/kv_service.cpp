@@ -9,15 +9,7 @@ namespace rtcfg::consul {
     ConsulKVWatcherPtr ConsulKVService::Cache(const String &key) {
         auto result = std::shared_ptr<ConsulKVWatcher>(nullptr);
         if (!caches.Find(key, result)) {
-            result = std::make_shared<ConsulKVWatcher>(key, [&]() -> ConsulKVGroup {
-                auto result = ConsulKVGroup{};
-                auto rsp = consul.GetKV(key);
-                auto j = nlohmann::json::parse(rsp);
-                for (auto &e: j) {
-                    result[key] = ConsulKV(e);
-                }
-                return std::move(result);
-            });
+            result = std::make_shared<ConsulKVWatcher>(key);
             caches.Insert(key, result);
         }
         return result;

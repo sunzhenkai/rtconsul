@@ -1,37 +1,20 @@
 #ifndef RTCFG_THREAD_H
 #define RTCFG_THREAD_H
 
-#include <csignal>
-#include <utility>
+#include <thread>
 #include "defines.h"
-#include "atomic"
-
-#define CUSTOM_STOP_SIGNAL SIGUSR1
 
 namespace rtcfg {
-    typedef void *(*ThreadFn)(void *);
-
-    class Thread {
-        pthread_t thread_{};
+    class LoopThread {
         String name_;
-        ThreadFn fn_{};
-        void *data_{};
-        std::atomic<bool> start_{false};
-        Thread() = default;
-        tid_t tid_{};
-
-        static void empty_signal_handler(int signum) {};
-        static struct sigaction old_action;
+        std::thread thread_;
+        bool started_{false};
     public:
-        Thread(String name, ThreadFn fn, void *data = nullptr) : name_(std::move(name)), fn_(fn), data_(data) {}
-        static void Init();
-        static void Reset();
-        static void *Run(void *param);
-        void Start();
-        void Join();
-        void Kill();
-        String GetThreadName();
+        LoopThread(String name) : name_(std::move(name)) {
+
+        }
     };
 }
+
 
 #endif //RTCFG_THREAD_H

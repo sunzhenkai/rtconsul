@@ -20,10 +20,11 @@ aux_source_directory(src/utils SRCS_DIRS)
 aux_source_directory(src/consul/client SRCS_DIRS)
 aux_source_directory(src/consul/service SRCS_DIRS)
 aux_source_directory(src/consul/model SRCS_DIRS)
+aux_source_directory(src/consul/kv SRCS_DIRS)
 aux_source_directory(src/thread SRCS_DIRS)
 
 set(EXTRA spdlog::spdlog
-        json::json
+        nlohmann_json::nlohmann_json
         curl::curl
         openssl::ssl
         openssl::crypto

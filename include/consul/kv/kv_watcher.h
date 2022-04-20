@@ -1,20 +1,32 @@
 #ifndef RTCFG_KV_WATCHER_H
 #define RTCFG_KV_WATCHER_H
 
-#include "consul/kv/data_watcher.h"
+#include <thread>
+#include <atomic>
 #include "consul/model/consul_kv.h"
 
 namespace rtcfg::consul {
-    class ConsulKVWatcher : public DataWatcher<ConsulKVGroup> {
+    class ConsulKVWatcher {
+        pthread_t tid_{0};
+        bool started_{false};
+        String path_;
+        Map<String, ConsulKVPtr> data_;
+        pthread_mutex_t thread_mutex_;
     public:
-        ConsulKVWatcher(String key, DataWatcherFun<ConsulKVGroup> &&f) :
-                DataWatcher<ConsulKVGroup>(std::move(key), std::move(f)) {
-        }
+        explicit ConsulKVWatcher(String path) : path_(std::move(path)) {}
 
-        ConsulKV Get(const String &key) {
-            ConsulKV kv;
-            data.find(key);
-            return std::move(kv);
+        ConsulKVPtr Get(const String &key);
+
+        static void *Run(void *param);
+
+        void Start();
+
+        void Stop();
+
+        void DoWatch();
+
+        ~ConsulKVWatcher() {
+            Stop();
         }
     };
 
