@@ -45,19 +45,19 @@ namespace rtcfg {
         return curl_handler;
     }
 
-    HTTPResult HTTPClient::Get(const String &path, SSMap &headers, SSMap &params, long timeout) {
+    HTTPResult HTTPClient::Get(const String &path, const SSMap &params, const SSMap &headers, long timeout) {
         CURL *curl_handler = GetCurlHandler();
         CURLcode curl_res;
         String url = path;
 
         String params_encoded = EncodingParams(params);
         if (!params_encoded.empty()) {
-            url.append("?").append(url);
+            url.append("?").append(params_encoded);
         }
 
         SList assembled_headers = AssembleHeaders(headers);
         curl_easy_reset(curl_handler);
-        spdlog::debug("[HTTPClient]-Get: url. [url={}]", url);
+        spdlog::debug("[HTTPClient]-Get: url. [url={}, timeout={}ms]", url, timeout);
         curl_easy_setopt(curl_handler, CURLOPT_URL, url.c_str());
 
         HTTPResult r;
@@ -81,9 +81,13 @@ namespace rtcfg {
         }
 
         if (curl_res != CURLE_OK) {
-            spdlog::error("[HTTPClient]-Get:curl_easy_perform() failed: {} - {}",
+            spdlog::debug("[HTTPClient]-Get:curl_easy_perform() failed: {} - {}",
                           curl_res, curl_easy_strerror(curl_res));
-            throw NetworkException(curl_res, curl_easy_strerror(curl_res));
+            if (curl_res == CURLE_OPERATION_TIMEDOUT) {
+                throw ReadTimeoutException(url + " - " + curl_easy_strerror(curl_res));
+            } else {
+                throw NetworkException(curl_res, curl_easy_strerror(curl_res));
+            }
         }
 
         curl_easy_getinfo(curl_handler, CURLINFO_RESPONSE_CODE, &r.code);
@@ -98,7 +102,7 @@ namespace rtcfg {
         curl_global_cleanup();
     }
 
-    String HTTPClient::EncodingParams(SSMap &params) {
+    String HTTPClient::EncodingParams(const SSMap &params) {
         String result;
         for (const auto &it: params) {
             if (!result.empty()) {
@@ -111,7 +115,7 @@ namespace rtcfg {
         return result;
     }
 
-    SList HTTPClient::AssembleHeaders(SSMap &headers) {
+    SList HTTPClient::AssembleHeaders(const SSMap &headers) {
         SList result;
         for (const auto &it: headers) {
             result.emplace_back(it.first + ": " + it.second);

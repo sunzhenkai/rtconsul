@@ -13,14 +13,15 @@ namespace rtcfg {
         pthread_key_t pthread_key_{};
     public:
         HTTPClient();
-        HTTPResult Get(const String &path, SSMap &headers = EMPTY_MAP, SSMap &params = EMPTY_MAP, long timeout = 5);
+        HTTPResult
+        Get(const String &path, const SSMap &params = EMPTY_MAP, const SSMap &headers = EMPTY_MAP, long timeout = 5000);
         static void InitCurl();
         static void CleanUp();
     private:
         CURL *GetCurlHandler() const;
         static void DestroyCurlHandler(void *arg);
-        static String EncodingParams(SSMap &params);
-        static SList AssembleHeaders(SSMap &headers);
+        static String EncodingParams(const SSMap &params);
+        static SList AssembleHeaders(const SSMap &headers);
         static void SetBasicOpts(CURL *curl_handler);
     };
 }

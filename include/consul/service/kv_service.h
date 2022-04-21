@@ -10,17 +10,17 @@
 #include "utils/safe_map.h"
 
 namespace rtcfg::consul {
-    class ConsulKVService : public ConfigService<ConsulKVWatcherPtr> {
+    class ConsulKVService {
     private:
         ConsulClient consul;
         SafeMap<String, ConsulKVWatcherPtr> caches;
     public:
         explicit ConsulKVService(const SSMap &props) : consul(props) {}
-        String Get(const String &key) override;
-        ConsulKVWatcherPtr Cache(const String &key) override;
-        void DiscardCache(const String &key) override;
-        void Subscribe(const String &key, Listener *listener) override;
-        void Unsubscribe(const String &key, Listener *listener) override;
+        String Get(const String &key, const SSMap &params = EMPTY_SS_MAP);
+        ConsulKVWatcherPtr Cache(const String &key);
+        void DiscardCache(const String &key);
+        void Subscribe(const String &key, Listener *listener);
+        void Unsubscribe(const String &key, Listener *listener);
     };
 }
 

@@ -1,4 +1,5 @@
 #include "consul/kv/kv_watcher.h"
+#include "exceptions.h"
 
 namespace rtcfg::consul {
     ConsulKVPtr ConsulKVWatcher::Get(const String &key) {
@@ -33,15 +34,18 @@ namespace rtcfg::consul {
     }
 
     void ConsulKVWatcher::DoWatch() {
-        // TODO
-        auto f = [&]() -> ConsulKVGroup {
+        SSMap params{{"index", std::to_string(data_index_)}};
+        try {
+            auto rsp = consul_.GetKV(path_, params);
             auto result = ConsulKVGroup{};
-            auto rsp = consul.GetKV(key);
-            auto j = nlohmann::json::parse(rsp);
+            data_index_ = rsp.first;
+            auto j = nlohmann::json::parse(rsp.second);
             for (auto &e: j) {
-                result[key] = ConsulKV(e);
+                spdlog::info("[KVWatcher]-DoWatch: parse kv. [data={}]", e.dump());
+                auto r = ConsulKV(e);
             }
-            return std::move(result);
-        };
+        } catch (ReadTimeoutException &err) { // ignore long pulling timeout error
+            spdlog::debug("[ConsulKVWatcher]-DoWatch: read timeout error. [message={}]", err.what());
+        }
     }
 }

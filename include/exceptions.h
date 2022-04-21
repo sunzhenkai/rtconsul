@@ -22,6 +22,13 @@ namespace rtcfg {
         int code() const { return code_; }
     };
 
+    class ReadTimeoutException : public std::exception {
+        String message_;
+    public:
+        explicit ReadTimeoutException(String message) : message_(MOVE(message)) {}
+        const char *what() const noexcept override { return message_.c_str(); }
+    };
+
     class RTException : public std::exception {
     private:
         String message_;

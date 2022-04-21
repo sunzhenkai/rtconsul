@@ -45,6 +45,3 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
 
 add_executable(test tests/unit/test.cpp ${SRCS_DIRS})
 target_link_libraries(test ${EXTRA})
-
-add_executable(test_thread tests/unit/test_thread.cpp ${SRCS_DIRS})
-target_link_libraries(test_thread ${EXTRA})

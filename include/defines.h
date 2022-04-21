@@ -23,6 +23,10 @@ namespace rtcfg {
 
 #ifndef GET_OR_DEFAULT
 #define GET_OR_DEFAULT(m, k, dft) m.find(k) != (m).end() ? (m).find(k)->second : dft
-#endif //GET_OR_DEFAULT
+#endif // GET_OR_DEFAULT
+
+#ifndef MOVE
+#define MOVE(v) std::move(v)
+#endif // MOVE
 
 #endif //RTCFG_DEFINES_H

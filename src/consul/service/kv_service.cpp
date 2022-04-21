@@ -2,14 +2,14 @@
 #include "nlohmann/json.hpp"
 
 namespace rtcfg::consul {
-    String ConsulKVService::Get(const String &key) {
-        return consul.GetKV(key);
+    String ConsulKVService::Get(const String &key, const SSMap &params) {
+        return consul.GetKV(key, params).second;
     }
 
     ConsulKVWatcherPtr ConsulKVService::Cache(const String &key) {
         auto result = std::shared_ptr<ConsulKVWatcher>(nullptr);
         if (!caches.Find(key, result)) {
-            result = std::make_shared<ConsulKVWatcher>(key);
+            result = std::make_shared<ConsulKVWatcher>(consul, key);
             caches.Insert(key, result);
         }
         return result;

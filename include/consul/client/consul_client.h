@@ -25,8 +25,10 @@ namespace rtcfg::consul {
             };
         }
 
-        String GetKV(const String &key);
+        std::pair<long, String> GetKV(const String &path, const SSMap &params = EMPTY_SS_MAP);
     };
+
+    typedef std::shared_ptr<ConsulClient> ConsulClientPtr;
 }
 
 #endif //RTCFG_CONSUL_CLIENT_H

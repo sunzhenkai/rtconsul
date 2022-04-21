@@ -3,17 +3,22 @@
 
 #include <thread>
 #include <atomic>
+#include <utility>
 #include "consul/model/consul_kv.h"
+#include "consul/client/consul_client.h"
+#include "defines.h"
 
 namespace rtcfg::consul {
     class ConsulKVWatcher {
+        ConsulClient &consul_;
         pthread_t tid_{0};
         bool started_{false};
         String path_;
         Map<String, ConsulKVPtr> data_;
-        pthread_mutex_t thread_mutex_;
+        pthread_mutex_t thread_mutex_{};
+        long data_index_;
     public:
-        explicit ConsulKVWatcher(String path) : path_(std::move(path)) {}
+        ConsulKVWatcher(ConsulClient &consul, String path) : consul_(consul), path_(MOVE(path)) {}
 
         ConsulKVPtr Get(const String &key);
 
