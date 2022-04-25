@@ -20,7 +20,7 @@ aux_source_directory(src/utils SRCS_DIRS)
 aux_source_directory(src/consul/client SRCS_DIRS)
 aux_source_directory(src/consul/service SRCS_DIRS)
 aux_source_directory(src/consul/model SRCS_DIRS)
-aux_source_directory(src/consul/kv SRCS_DIRS)
+aux_source_directory(src/consul/data SRCS_DIRS)
 aux_source_directory(src/thread SRCS_DIRS)
 
 set(EXTRA spdlog::spdlog

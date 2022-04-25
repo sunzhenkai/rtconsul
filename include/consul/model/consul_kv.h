@@ -29,8 +29,7 @@ namespace rtcfg::consul {
     };
 
     using ConsulKVPtr = std::shared_ptr<ConsulKV>;
-    using ConsulKVGroup = Map<String, ConsulKV>;
-    using ConsulKVVector = std::vector<ConsulKV>;
+    using ConsulKVGroup = Map<String, ConsulKVPtr>;
 }
 
 

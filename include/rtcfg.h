@@ -9,6 +9,7 @@ namespace rtcfg {
     class RTCFG {
     public:
         static consul::ConsulKVService GetConsulKVService(const SSMap &config);
+        static consul::ConsulService
     };
 }
 

@@ -1,5 +1,6 @@
 #include "rtcfg.h"
 #include "spdlog/spdlog.h"
+#include "consul/data/data_watcher.h"
 
 using namespace rtcfg;
 

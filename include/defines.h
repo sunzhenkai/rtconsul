@@ -4,6 +4,7 @@
 #include "string"
 #include "unordered_map"
 #include "list"
+#include "vector"
 #include "mutex"
 #include "shared_mutex"
 
@@ -19,6 +20,8 @@ namespace rtcfg {
     using SLock = std::shared_lock<SMutex>;
     using ULock = std::shared_lock<SMutex>;
     typedef unsigned long int tid_t;
+    template<typename T>
+    using Vector = std::vector<T>;
 }
 
 #ifndef GET_OR_DEFAULT

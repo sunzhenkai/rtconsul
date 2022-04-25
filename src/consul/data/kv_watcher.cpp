@@ -42,10 +42,14 @@ namespace rtcfg::consul {
             auto j = nlohmann::json::parse(rsp.second);
             for (auto &e: j) {
                 spdlog::info("[KVWatcher]-DoWatch: parse kv. [data={}]", e.dump());
-                auto r = ConsulKV(e);
+                auto r = std::make_shared<ConsulKV>(e);
+                result.emplace(r->key, r);
             }
+            spdlog::debug("[ConsulKVWatcher]-DoWatch: swap data. [before={}, after={}]", data_.size(), result.size());
+            std::swap(data_, result);
+            result.clear();
         } catch (ReadTimeoutException &err) { // ignore long pulling timeout error
-            spdlog::debug("[ConsulKVWatcher]-DoWatch: read timeout error. [message={}]", err.what());
+            spdlog::debug("[ConsulKVWatcher]-DoWatch: read timeout. [message={}]", err.what());
         }
     }
 }
