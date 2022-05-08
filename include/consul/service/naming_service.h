@@ -13,6 +13,7 @@ namespace rtcfg::consul {
     public:
         explicit ConsulNamingService(ConsulClient &consul) : consul_client_(consul) {}
         String Get(const String &service, const SSMap &params = EMPTY_SS_MAP);
+        ConsulServiceWatcherPtr Cache(const String &service);
     };
 }
 

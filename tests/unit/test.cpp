@@ -17,6 +17,8 @@ int main() {
     auto &srv = cs.GetNamingService();
     auto srv_res = srv.Get("consul");
     spdlog::info("{}", srv_res);
+    auto srv_cache = srv.Cache("consul");
+    srv_cache->Start();
 
     // done
     std::this_thread::sleep_for(std::chrono::seconds(10));

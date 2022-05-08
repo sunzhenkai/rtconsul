@@ -7,8 +7,7 @@
 namespace rtcfg::consul {
     class ConsulServiceWatcher : public ConsulDataWatcher<String> {
     public:
-        ConsulServiceWatcher(ConsulClient &consul, String path) : ConsulDataWatcher<String>(consul, path) {
-        }
+        ConsulServiceWatcher(ConsulClient &consul, const String &path) : ConsulDataWatcher<String>(consul, path) {}
 
         void DoWatch() override;
     };
