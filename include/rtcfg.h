@@ -3,13 +3,12 @@
 
 #include "service/config_service.h"
 #include "defines.h"
-#include "consul/service/kv_service.h"
+#include "consul/consul.h"
 
 namespace rtcfg {
     class RTCFG {
     public:
-        static consul::ConsulKVService GetConsulKVService(const SSMap &config);
-        static consul::ConsulService
+        static consul::Consul GetConsul(const SSMap &config);
     };
 }
 

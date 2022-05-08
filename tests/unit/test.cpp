@@ -1,17 +1,24 @@
 #include "rtcfg.h"
 #include "spdlog/spdlog.h"
-#include "consul/data/data_watcher.h"
 
 using namespace rtcfg;
 
 int main() {
     spdlog::set_level(spdlog::level::debug);
     SSMap properties{};
-    consul::ConsulKVService cs = RTCFG::GetConsulKVService(properties);
+    consul::Consul cs = RTCFG::GetConsul(properties);
+    auto &kv = cs.GetKVService();
     String key = "foo";
-    spdlog::info("key: {}, value: {}", key, cs.Get(key));
-    auto watcher = cs.Cache(key);
+    spdlog::info("key: {}, value: {}", key, kv.Get(key));
+    auto watcher = kv.Cache(key);
     watcher->Start();
+
+    // service
+    auto &srv = cs.GetNamingService();
+    auto srv_res = srv.Get("consul");
+    spdlog::info("{}", srv_res);
+
+    // done
     std::this_thread::sleep_for(std::chrono::seconds(10));
     return 0;
 }

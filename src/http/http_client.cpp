@@ -57,7 +57,7 @@ namespace rtcfg {
 
         SList assembled_headers = AssembleHeaders(headers);
         curl_easy_reset(curl_handler);
-        spdlog::debug("[HTTPClient]-Get: url. [url={}, timeout={}ms]", url, timeout);
+        spdlog::debug("[HTTPClient::Get] url. [url={}, timeout={}ms]", url, timeout);
         curl_easy_setopt(curl_handler, CURLOPT_URL, url.c_str());
 
         HTTPResult r;
@@ -81,7 +81,7 @@ namespace rtcfg {
         }
 
         if (curl_res != CURLE_OK) {
-            spdlog::debug("[HTTPClient]-Get:curl_easy_perform() failed: {} - {}",
+            spdlog::debug("[HTTPClient::Get]curl_easy_perform() failed: {} - {}",
                           curl_res, curl_easy_strerror(curl_res));
             if (curl_res == CURLE_OPERATION_TIMEDOUT) {
                 throw ReadTimeoutException(url + " - " + curl_easy_strerror(curl_res));

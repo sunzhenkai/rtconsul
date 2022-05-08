@@ -11,6 +11,7 @@ namespace rtcfg {
 
     extern const String CONSUL_DEFAULT_URL;
     extern const String CONSUL_KV_PREFIX;
+    extern const String CONSUL_HEALTH_SERVICE;
 
     extern const SSMap EMPTY_SS_MAP;
 }

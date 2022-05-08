@@ -9,6 +9,14 @@ namespace rtcfg {
         auto it = m.find(key);
         return it == m.end() ? dft : it->second;
     }
+
+    static bool EndWith(const String &v, const char &c) {
+        if (v.empty()) {
+            return false;
+        } else {
+            return v[v.length() - 1] == c;
+        }
+    }
 }
 
 

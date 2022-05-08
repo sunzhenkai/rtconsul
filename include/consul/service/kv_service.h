@@ -12,10 +12,10 @@
 namespace rtcfg::consul {
     class ConsulKVService {
     private:
-        ConsulClient consul;
+        ConsulClient &consul_client_;
         SafeMap<String, ConsulKVWatcherPtr> caches;
     public:
-        explicit ConsulKVService(const SSMap &props) : consul(props) {}
+        explicit ConsulKVService(ConsulClient &consul) : consul_client_(consul) {}
         String Get(const String &key, const SSMap &params = EMPTY_SS_MAP);
         ConsulKVWatcherPtr Cache(const String &key);
         void DiscardCache(const String &key);
@@ -23,5 +23,6 @@ namespace rtcfg::consul {
         void Unsubscribe(const String &key, Listener *listener);
     };
 }
+
 
 #endif //RTCFG_KV_SERVICE_H

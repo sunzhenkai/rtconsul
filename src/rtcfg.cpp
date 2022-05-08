@@ -1,9 +1,9 @@
 #include "rtcfg.h"
 #include "exceptions.h"
-#include "consul/service/kv_service.h"
+#include "consul/consul.h"
 
 namespace rtcfg {
-    consul::ConsulKVService RTCFG::GetConsulKVService(const SSMap &config) {
-        return consul::ConsulKVService(config);
+    consul::Consul RTCFG::GetConsul(const SSMap &config) {
+        return consul::Consul(config);
     }
 }

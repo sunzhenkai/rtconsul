@@ -8,6 +8,7 @@ namespace rtcfg {
 
     String const CONSUL_DEFAULT_URL = "http://127.0.0.1:8500";
     String const CONSUL_KV_PREFIX = "/v1/kv/";
+    String const CONSUL_HEALTH_SERVICE = "/v1/health/service/";
 
     SSMap const EMPTY_SS_MAP{};
 }

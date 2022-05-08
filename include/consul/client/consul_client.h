@@ -11,6 +11,7 @@ namespace rtcfg::consul {
     struct ConsulConfig {
         String host;
         String kv_url;
+        String health_service_url;
     };
 
     class ConsulClient {
@@ -21,14 +22,14 @@ namespace rtcfg::consul {
         explicit ConsulClient(const SSMap &props) {
             config = ConsulConfig{
                     GET_OR_DEFAULT(props, KEY_HOST, CONSUL_DEFAULT_URL),
-                    GET_OR_DEFAULT(props, KEY_HOST, CONSUL_DEFAULT_URL) + CONSUL_KV_PREFIX
+                    GET_OR_DEFAULT(props, KEY_HOST, CONSUL_DEFAULT_URL) + CONSUL_KV_PREFIX,
+                    GET_OR_DEFAULT(props, KEY_HOST, CONSUL_DEFAULT_URL) + CONSUL_HEALTH_SERVICE
             };
         }
 
         std::pair<long, String> GetKV(const String &path, const SSMap &params = EMPTY_SS_MAP);
+        std::pair<long, String> GetHealthService(const String &service, const SSMap &params = EMPTY_SS_MAP);
     };
-
-    typedef std::shared_ptr<ConsulClient> ConsulClientPtr;
 }
 
 #endif //RTCFG_CONSUL_CLIENT_H
