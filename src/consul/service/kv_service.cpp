@@ -9,7 +9,7 @@ namespace rtcfg::consul {
         auto result = std::shared_ptr<ConsulKVWatcher>(nullptr);
         if (!caches.Find(key, result)) {
             result = std::make_shared<ConsulKVWatcher>(consul_client_, key);
-            caches.Insert(key, result);
+            caches.InsertIfAbsent(key, result);
         }
         return result;
     }

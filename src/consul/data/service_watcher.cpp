@@ -6,7 +6,9 @@ namespace rtcfg::consul {
         SSMap params{{"index", std::to_string(data_index_)}};
         auto rsp = consul_.GetHealthService(service_, params);
         spdlog::debug("[ConsulServiceWatcher::DoWatch] response. {index={}, response={}}",
-                      rsp.first, rsp.second);
+                      rsp.first, rsp.second.size());
+        auto j = nlohmann::json::parse(rsp.second);
+        PassingServices services(j);
         data_index_ = rsp.first;
     }
 }

@@ -17,6 +17,13 @@ namespace rtcfg {
             data.insert({k, v});
         }
 
+        void InsertIfAbsent(const K &k, const V&v) {
+            ULock lock(mtx);
+            if (data.find(k) == data.end()) {
+                data.insert({k, v});
+            }
+        }
+
         bool Find(const K &k, V &result) {
             SLock lock(mtx);
             auto it = data.find(k);

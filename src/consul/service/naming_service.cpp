@@ -9,7 +9,7 @@ namespace rtcfg::consul {
         auto result = std::shared_ptr<ConsulServiceWatcher>(nullptr);
         if (!caches.Find(service, result)) {
             result = std::make_shared<ConsulServiceWatcher>(consul_client_, service);
-            caches.Insert(service, result);
+            caches.InsertIfAbsent(service, result);
         }
         return result;
     }
