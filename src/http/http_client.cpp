@@ -81,12 +81,11 @@ namespace rtcfg {
         }
 
         if (curl_res != CURLE_OK) {
-            spdlog::debug("[HTTPClient::Get]curl_easy_perform() failed: {} - {}",
-                          curl_res, curl_easy_strerror(curl_res));
+            spdlog::debug("[HTTPClient::Get] curl_easy_perform() failed: {} - {}", curl_res, CURL_ERR(curl_res));
             if (curl_res == CURLE_OPERATION_TIMEDOUT) {
-                throw ReadTimeoutException(url + " - " + curl_easy_strerror(curl_res));
+                throw ReadTimeoutException(url + " - " + CURL_ERR(curl_res));
             } else {
-                throw NetworkException(curl_res, curl_easy_strerror(curl_res));
+                throw NetworkException(curl_res, CURL_ERR(curl_res));
             }
         }
 

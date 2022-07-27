@@ -16,8 +16,8 @@ namespace rtcfg::consul {
         assert(!base_url.empty());
         String url = EndWith(base_url, '/') ? base_url + service : base_url + '/' + service;
         auto rsp = http_client.Get(url, params);
-        spdlog::debug("[ConsulClient::GetHealthService] response. [service={}, response={}]",
-                      service, rsp.content);
+//        spdlog::debug("[ConsulClient::GetHealthService] http raw response. [url={} service={}, response={}]",
+//                      url, service, rsp.content);
         auto it = rsp.headers.find(KEY_CONSUL_INDEX);
         assert(it != rsp.headers.end());
         return std::make_pair(std::stol(it->second), rsp.content);

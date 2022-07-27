@@ -14,14 +14,16 @@ namespace rtcfg::consul {
         pthread_t tid_{0};
         bool started_{false};
         pthread_mutex_t thread_mutex_{};
+        int period_ms;
     protected:
         // consul
         ConsulClient &consul_;
     public:
-        explicit ConsulDataWatcher(ConsulClient &consul) : consul_(consul) {}
+        explicit ConsulDataWatcher(ConsulClient &consul, int period = 3000) : consul_(consul), period_ms(period) {}
         static void *Run(void *param);
         void Start();
         void Stop();
+        void Join();
         virtual void DoWatch() = 0;
         ~ConsulDataWatcher() {
             Stop();

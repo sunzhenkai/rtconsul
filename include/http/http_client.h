@@ -8,6 +8,8 @@
 #include "utils/url.h"
 
 namespace rtcfg {
+#define CURL_ERR(...) curl_easy_strerror(__VA_ARGS__)
+
     class HTTPClient {
         static SSMap EMPTY_MAP;
         pthread_key_t pthread_key_{};

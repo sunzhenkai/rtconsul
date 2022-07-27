@@ -6,6 +6,9 @@ namespace rtcfg::consul {
         auto *w = (ConsulDataWatcher *) param;
         while (w->started_) {
             w->DoWatch();
+            if (w->period_ms > 0) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(w->period_ms));
+            }
         }
         return nullptr;
     }
@@ -26,5 +29,9 @@ namespace rtcfg::consul {
             started_ = false;
         }
         pthread_mutex_unlock(&thread_mutex_);
+    }
+
+    void ConsulDataWatcher::Join() {
+        pthread_join(tid_, nullptr);
     }
 }

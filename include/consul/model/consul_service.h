@@ -1,17 +1,22 @@
 #ifndef RTCFG_SERVICE_INSTANCE_H
 #define RTCFG_SERVICE_INSTANCE_H
 
+#include <cassert>
 #include "defines.h"
 #include "nlohmann/json.hpp"
+#include "spdlog/spdlog.h"
 
 namespace rtcfg::consul {
     struct Address {
         String address;
-        int port;
 
-        explicit Address(const nlohmann::json &j) :
-                address(j["address"].get<String>()),
-                port(j["port"].get<int>()) {}
+        explicit Address(const nlohmann::json &j) {
+            if (j.is_string()) {
+                address = j.get<String>();
+            } else if (j.contains("address")) {
+                address = j["address"].get<String>();
+            }
+        }
     };
 
     struct TaggedAddresses {
@@ -44,82 +49,83 @@ namespace rtcfg::consul {
         int64_t modify_index;
 
         explicit Node(const nlohmann::json &j) :
-                id(j["id"].get<String>()),
-                node(j["node"].get<String>()),
-                address(j["address"].get<String>()),
-                data_center(j["data_center"].get<String>()),
-                tagged_addresses(j["tagged_addresses"].get<nlohmann::json>()),
-                meta(j["meta"].get<nlohmann::json>()),
-                create_index(j["create_index"].get<int64_t>()),
-                modify_index(j["modify_index"].get<int64_t>()) {}
+                id(j["ID"].get<String>()),
+                node(j["Node"].get<String>()),
+                address(j["Address"].get<String>()),
+                data_center(j["Datacenter"].get<String>()),
+                tagged_addresses(j["TaggedAddresses"].get<nlohmann::json>()),
+                meta(j["Meta"].get<nlohmann::json>()),
+                create_index(j["CreateIndex"].get<int64_t>()),
+                modify_index(j["ModifyIndex"].get<int64_t>()) {}
     };
 
-    struct ServiceWeights {
+    struct Tags {
+        Vector <String> tags;
+
+        explicit Tags(const nlohmann::json &j) {
+            assert(j.is_array());
+            tags.reserve(j.size());
+            for (auto &e: j) {
+                tags.emplace_back(e.get<String>());
+            }
+        }
+    };
+
+    struct Weights {
         int passing;
         int warning;
 
-        explicit ServiceWeights(const nlohmann::json &j) :
-                passing(j["passing"].get<int>()),
-                warning(j["warning"].get<int>()) {}
+        explicit Weights(const nlohmann::json &j) :
+                passing(j["Passing"].get<int>()),
+                warning(j["Warning"].get<int>()) {}
     };
 
     struct Service {
         String id;
         String service;
-        Vector<String> tags;
+        Tags tags;
         String address;
         Meta meta;
         int port;
         bool enable_tag_override;
-        TaggedAddresses tagged_addresses;
         int64_t create_index;
         int64_t modify_index;
         String name_space;
 
         explicit Service(const nlohmann::json &j) :
-                id(j["id"].get<String>()),
-                service(j["service"].get<String>()),
-                address(j["address"].get<String>()),
-                meta(j["meta"].get<nlohmann::json>()),
-                port(j["port"].get<int>()),
-                enable_tag_override(j["enable_tag_override"].get<bool>()),
-                tagged_addresses(j["tagged_addresses"].get<nlohmann::json>()),
-                create_index(j["create_index"].get<int64_t>()),
-                modify_index(j["modify_index"].get<int64_t>()),
-                name_space(j["name_space"].get<String>()) {
-            auto &tgs = j["tags"];
-            tags.resize(tgs.size());
-            for (auto &v : tgs) {
-                tags.emplace_back(v);
+                id(j["ID"].get<String>()),
+                service(j["Service"].get<String>()),
+                address(j["Address"].get<String>()),
+                meta(j["Meta"].get<nlohmann::json>()),
+                port(j["Port"].get<int>()),
+                enable_tag_override(j["EnableTagOverride"].get<bool>()),
+                create_index(j["CreateIndex"].get<int64_t>()),
+                modify_index(j["ModifyIndex"].get<int64_t>()),
+                tags(j["Tags"].get<nlohmann::json>()) {}
+    };
+
+    struct ServiceInstance {
+        Node node;
+        Service service;
+
+        explicit ServiceInstance(const nlohmann::json &j) :
+                node(j["Node"].get<nlohmann::json>()),
+                service(j["Service"].get<nlohmann::json>()) {}
+    };
+
+    struct ServiceInstances {
+        Vector <ServiceInstance> instances;
+
+        explicit ServiceInstances(const nlohmann::json &j) {
+            assert(j.is_array());
+            for (auto &e: j) {
+                spdlog::debug("{}", e.dump(4));
+                instances.emplace_back(e);
             }
         }
     };
 
-    struct Check {
-        String node;
-        String check_id;
-        String name;
-        String status;
-        String notes;
-        String output;
-        String service_id;
-        String service_name;
-        Vector<String> service_tags;
-        String name_space;
-    };
-
-    struct PassingServices {
-        Node node;
-        Service service;
-        Vector<Check> checks;
-
-        explicit PassingServices(const nlohmann::json &j) :
-                node(j["nod"].get<nlohmann::json>()),
-                service(j["service"].get<nlohmann::json>()) {
-        }
-    };
-
-    typedef std::shared_ptr<PassingServices> PassingServicesPtr;
+    typedef std::shared_ptr<ServiceInstances> ServiceInstancesPtr;
 }
 
 #endif //RTCFG_SERVICE_INSTANCE_H
