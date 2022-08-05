@@ -60,7 +60,7 @@ namespace rtcfg::consul {
     };
 
     struct Tags {
-        Vector <String> tags;
+        Vector<String> tags;
 
         explicit Tags(const nlohmann::json &j) {
             assert(j.is_array());
@@ -80,7 +80,33 @@ namespace rtcfg::consul {
                 warning(j["Warning"].get<int>()) {}
     };
 
+    // check define https://www.consul.io/docs/discovery/checks
+    struct Check {
+        // common
+        String id;
+        String name;
+        // http & tcp
+        String interval;
+        String timeout;
+        // http check
+        String http;
+        String method;
+        // tcp
+        String tcp;
+        // ttl check
+        String ttl;
+    };
+
+    struct Checks {
+        std::vector<Check> checks;
+    };
+
+    // service define https://www.consul.io/docs/discovery/services
     struct Service {
+
+    };
+
+    struct RService {
         String id;
         String service;
         Tags tags;
@@ -92,9 +118,9 @@ namespace rtcfg::consul {
         int64_t modify_index;
         String name_space;
 
-        explicit Service(const nlohmann::json &j) :
+        explicit RService(const nlohmann::json &j) :
                 id(j["ID"].get<String>()),
-                service(j["Service"].get<String>()),
+                service(j["RService"].get<String>()),
                 address(j["Address"].get<String>()),
                 meta(j["Meta"].get<nlohmann::json>()),
                 port(j["Port"].get<int>()),
@@ -106,15 +132,15 @@ namespace rtcfg::consul {
 
     struct ServiceInstance {
         Node node;
-        Service service;
+        RService service;
 
         explicit ServiceInstance(const nlohmann::json &j) :
                 node(j["Node"].get<nlohmann::json>()),
-                service(j["Service"].get<nlohmann::json>()) {}
+                service(j["RService"].get<nlohmann::json>()) {}
     };
 
     struct ServiceInstances {
-        Vector <ServiceInstance> instances;
+        Vector<ServiceInstance> instances;
 
         explicit ServiceInstances(const nlohmann::json &j) {
             assert(j.is_array());
