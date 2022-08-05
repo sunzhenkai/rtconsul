@@ -42,6 +42,8 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
 
 option(BUILD_TEST "build tests" OFF)
 if (BUILD_TEST)
+    include(external/googletest/check.cmake)
     include(cmakes/sample.cmake)
     include(cmakes/test.cmake)
+    include(cmakes/gtest.cmake)
 endif ()
