@@ -13,4 +13,8 @@ namespace rtcfg::consul {
         }
         return result;
     }
+
+    void ConsulNamingService::Register(const Service &service) {
+        spdlog::info("service {}", service.name);
+    }
 }

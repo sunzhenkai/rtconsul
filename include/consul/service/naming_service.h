@@ -15,6 +15,8 @@ namespace rtcfg::consul {
         String Get(const String &service, const SSMap &params = EMPTY_SS_MAP);
 
         ConsulServiceWatcherPtr Cache(const String &service);
+
+        void Register(const Service &service);
     };
 }
 

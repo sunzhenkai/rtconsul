@@ -7,6 +7,8 @@
 #include "spdlog/spdlog.h"
 
 namespace rtcfg::consul {
+#define SET_JSON_STR_NON_EMPTY(f, v, j) if (v.size() != 0) j[f] = v
+
     struct Address {
         String address;
 
@@ -35,6 +37,10 @@ namespace rtcfg::consul {
             for (auto &[k, v]: j.items()) {
                 data[k] = v;
             }
+        }
+
+        nlohmann::json ToJson() {
+            return nlohmann::json{data};
         }
     };
 
@@ -80,30 +86,65 @@ namespace rtcfg::consul {
                 warning(j["Warning"].get<int>()) {}
     };
 
-    // check define https://www.consul.io/docs/discovery/checks
-    struct Check {
-        // common
+    struct CheckBasic {
         String id;
         String name;
-        // http & tcp
+    };
+
+    struct TCPAndHTTPCheckBasic {
         String interval;
         String timeout;
-        // http check
+    };
+
+    struct HTTPCheck : CheckBasic, TCPAndHTTPCheckBasic {
         String http;
         String method;
-        // tcp
+    };
+
+    struct TCPCheck : CheckBasic, TCPAndHTTPCheckBasic {
         String tcp;
-        // ttl check
+    };
+
+    struct TTLCheck : CheckBasic {
         String ttl;
+    };
+
+    // check define https://www.consul.io/docs/discovery/checks
+    struct Check : HTTPCheck, TCPCheck, TTLCheck {
+        nlohmann::json ToJson() {
+            auto result = nlohmann::json{};
+//            SET_JSON_STR_NON_EMPTY("id", id, result);
+        }
     };
 
     struct Checks {
         std::vector<Check> checks;
+
+        nlohmann::json ToJson() {
+            return nlohmann::json::parse(checks);
+        }
     };
 
     // service define https://www.consul.io/docs/discovery/services
     struct Service {
+        String name;
+        String id;
+        int port;
+        std::vector<String> tags;
+        Meta meta;
+        TaggedAddresses taggedAddresses;
+        Checks checks;
 
+        nlohmann::json ToJson() {
+            return nlohmann::json{
+                    {"name",   name},
+                    {"id",     id},
+                    {"port",   port},
+                    {"tags",   tags},
+                    {"meta",   meta.ToJson()},
+                    {"checks", checks.ToJson()}
+            };
+        }
     };
 
     struct RService {
