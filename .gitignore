@@ -2,3 +2,4 @@
 3rd_party
 cmake-build*
 **.swp
+.DS_Store
