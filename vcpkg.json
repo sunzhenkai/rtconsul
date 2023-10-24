@@ -1,0 +1,12 @@
+{
+    "name": "vcpkg-base",
+    "version": "0.0.1",
+    "dependencies": [
+        "spdlog",
+        "openssl",
+        "curl",
+        "nlohmann-json"
+    ],
+    "overrides": [
+    ]
+}
