@@ -111,10 +111,11 @@ namespace rtcfg::consul {
 
     // check define https://www.consul.io/docs/discovery/checks
     struct Check : HTTPCheck, TCPCheck, TTLCheck {
-        nlohmann::json ToJson() {
-            auto result = nlohmann::json{};
+        // TODO fix this
+//        nlohmann::json ToJson() {
+//            auto result = nlohmann::json{};
 //            SET_JSON_STR_NON_EMPTY("id", id, result);
-        }
+//        }
     };
 
     struct Checks {

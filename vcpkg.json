@@ -5,7 +5,9 @@
         "spdlog",
         "openssl",
         "curl",
-        "nlohmann-json"
+        "fmt",
+        "nlohmann-json",
+        "gtest"
     ],
     "overrides": [
     ]
