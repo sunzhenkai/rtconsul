@@ -1,8 +1,8 @@
 #include "http/http_client.h"
 #include "curl/curl.h"
 #include "cstring"
-#include "spdlog/spdlog.h"
 #include "exceptions.h"
+#include "spdlog/spdlog.h"
 
 namespace rtcfg {
     static size_t WriteCallback(void *ptr, size_t size, size_t nmemb, void *user_data) {
@@ -81,7 +81,7 @@ namespace rtcfg {
         }
 
         if (curl_res != CURLE_OK) {
-            spdlog::debug("[HTTPClient::Get] curl_easy_perform() failed: {} - {}", curl_res, CURL_ERR(curl_res));
+            //            spdlog::debug("[HTTPClient::Get] curl_easy_perform() failed: {} - {}", curl_res, CURL_ERR(curl_res));
             if (curl_res == CURLE_OPERATION_TIMEDOUT) {
                 throw ReadTimeoutException(url + " - " + CURL_ERR(curl_res));
             } else {

@@ -5,7 +5,6 @@
         "spdlog",
         "openssl",
         "curl",
-        "fmt",
         "nlohmann-json",
         "gtest"
     ],
