@@ -1,48 +1,48 @@
-project(rtcfg)
-cmake_minimum_required(VERSION 3.16)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.24)
 SET(CMAKE_CXX_STANDARD 17)
+PROJECT(rtcfg)
+OPTION(BUILD_TEST "build tests" OFF)
 
-include_directories(include)
+INCLUDE_DIRECTORIES(include)
 
-include(external/spdlog/check.cmake)
-include(external/openssl/check.cmake)
-include(external/curl/check.cmake)
-include(external/json/check.cmake)
+FIND_PACKAGE(OpenSSL REQUIRED)
+FIND_PACKAGE(CURL CONFIG REQUIRED)
+FIND_PACKAGE(nlohmann_json CONFIG REQUIRED)
+FIND_PACKAGE(spdlog CONFIG REQUIRED)
 
-aux_source_directory(src SRCS_DIRS)
-aux_source_directory(src/constants SRCS_DIRS)
-aux_source_directory(src/factory SRCS_DIRS)
-aux_source_directory(src/model SRCS_DIRS)
-aux_source_directory(src/service SRCS_DIRS)
-aux_source_directory(src/http SRCS_DIRS)
-aux_source_directory(src/utils SRCS_DIRS)
-aux_source_directory(src/consul SRCS_DIRS)
-aux_source_directory(src/consul/client SRCS_DIRS)
-aux_source_directory(src/consul/data SRCS_DIRS)
-aux_source_directory(src/consul/service SRCS_DIRS)
-aux_source_directory(src/thread SRCS_DIRS)
+AUX_SOURCE_DIRECTORY(src PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/constants PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/factory PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/model PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/service PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/http PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/utils PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/consul PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/consul/client PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/consul/data PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/consul/service PRJ_SRCS)
+AUX_SOURCE_DIRECTORY(src/thread PRJ_SRCS)
 
-set(EXTRA spdlog::spdlog
+SET(LIB_DEPS OpenSSL::SSL
+        OpenSSL::Crypto
+        CURL::libcurl
         nlohmann_json::nlohmann_json
-        curl::curl
-        openssl::ssl
-        openssl::crypto
-        pthread
-        z
-        dl
-        m)
+        spdlog::spdlog
+)
 
-add_library(rtcfg-static STATIC ${SRCS_DIRS})
-target_link_libraries(rtcfg-static PRIVATE ${EXTRA})
-install(TARGETS rtcfg-static LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+ADD_LIBRARY(rtcfg ${PRJ_SRCS})
+TARGET_LINK_LIBRARIES(rtcfg PRIVATE ${LIB_DEPS})
+
+# install
+INSTALL(TARGETS rtcfg LIBRARY DESTINATION lib)
+INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
         DESTINATION include/rtcfg
         FILES_MATCHING PATTERN "*.h*")
 
-option(BUILD_TEST "build tests" OFF)
-if (BUILD_TEST)
-    include(external/googletest/check.cmake)
-    include(cmakes/sample.cmake)
-    include(cmakes/test.cmake)
-    include(cmakes/gtest.cmake)
-endif ()
+# test
+IF (BUILD_TEST)
+    # TODO GTest
+    INCLUDE(cmakes/sample.cmake)
+    INCLUDE(cmakes/test.cmake)
+    INCLUDE(cmakes/gtest.cmake)
+ENDIF ()

@@ -111,18 +111,20 @@ namespace rtcfg::consul {
 
     // check define https://www.consul.io/docs/discovery/checks
     struct Check : HTTPCheck, TCPCheck, TTLCheck {
-        nlohmann::json ToJson() {
-            auto result = nlohmann::json{};
+        // TODO fix this
+//        nlohmann::json ToJson() {
+//            auto result = nlohmann::json{};
 //            SET_JSON_STR_NON_EMPTY("id", id, result);
-        }
+//        }
     };
 
     struct Checks {
         std::vector<Check> checks;
 
-        nlohmann::json ToJson() {
-            return nlohmann::json::parse(checks);
-        }
+        // TODO fix
+//        nlohmann::json ToJson() {
+//            return ::nlohmann::json::parse(checks);
+//        }
     };
 
     // service define https://www.consul.io/docs/discovery/services
@@ -142,7 +144,7 @@ namespace rtcfg::consul {
                     {"port",   port},
                     {"tags",   tags},
                     {"meta",   meta.ToJson()},
-                    {"checks", checks.ToJson()}
+//                    {"checks", checks.ToJson()}
             };
         }
     };
