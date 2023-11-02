@@ -1,6 +1,4 @@
-#ifndef RTCFG_SAFE_MAP_H
-#define RTCFG_SAFE_MAP_H
-
+#pragma once
 #include "defines.h"
 
 namespace rtcfg {
@@ -44,5 +42,3 @@ namespace rtcfg {
         }
     };
 }
-
-#endif //RTCFG_SAFE_MAP_H

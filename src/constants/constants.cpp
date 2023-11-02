@@ -11,4 +11,6 @@ namespace rtcfg {
     String const CONSUL_HEALTH_SERVICE = "/v1/health/service/";
 
     SSMap const EMPTY_SS_MAP{};
+    SSMap const CONSUL_KV_KEYS{{"keys", ""}};
+    SSMap const CONSUL_KV_RECURSE{{"recurse", ""}};
 }

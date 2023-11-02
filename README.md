@@ -8,3 +8,10 @@
   - 🚂 register service
   - 🚰 deregister service
   - 🚰 service check
+
+# Usage
+## kv
+```shell
+# init
+
+```

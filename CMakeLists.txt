@@ -41,7 +41,6 @@ INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
 
 # test
 IF (BUILD_TEST)
-    # TODO GTest
     INCLUDE(cmakes/sample.cmake)
     INCLUDE(cmakes/test.cmake)
     INCLUDE(cmakes/gtest.cmake)

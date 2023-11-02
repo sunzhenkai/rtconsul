@@ -14,6 +14,8 @@ namespace rtcfg {
     extern const String CONSUL_HEALTH_SERVICE;
 
     extern const SSMap EMPTY_SS_MAP;
+    extern const SSMap CONSUL_KV_KEYS;
+    extern const SSMap CONSUL_KV_RECURSE;
 }
 
 

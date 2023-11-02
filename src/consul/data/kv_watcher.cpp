@@ -27,8 +27,8 @@ namespace rtcfg::consul {
     void ConsulKVWatcher::Stop() {
         pthread_mutex_lock(&thread_mutex_);
         if (started_) {
-            pthread_join(tid_, nullptr);
             started_ = false;
+            pthread_join(tid_, nullptr);
         }
         pthread_mutex_unlock(&thread_mutex_);
     }
@@ -51,7 +51,7 @@ namespace rtcfg::consul {
             }
 
             spdlog::debug("[ConsulKVWatcher::DoWatch] swap data. [before={}, after={}]", data_.size(), result.size());
-            std::swap(data_, result);
+            std::swap(data_, result); // TODO not thread safe
             result.clear();
         } catch (ReadTimeoutException &err) { // ignore long pulling timeout error
             spdlog::debug("[ConsulKVWatcher::DoWatch] read timeout. [message={}]", err.what());

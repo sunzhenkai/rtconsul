@@ -1,5 +1,4 @@
-#ifndef RTCFG_CONSUL_H
-#define RTCFG_CONSUL_H
+#pragma once
 
 #include "consul/client/consul_client.h"
 #include "consul/service/kv_service.h"
@@ -18,5 +17,3 @@ namespace rtcfg::consul {
         ConsulNamingService &GetNamingService();
     };
 }
-
-#endif //RTCFG_CONSUL_H

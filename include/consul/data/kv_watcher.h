@@ -16,20 +16,14 @@ namespace rtcfg::consul {
         String path_;
         Map<String, ConsulKVPtr> data_;
         pthread_mutex_t thread_mutex_{};
-        long data_index_;
+        long data_index_{};
     public:
         ConsulKVWatcher(ConsulClient &consul, String path) : consul_(consul), path_(MOVE(path)) {}
-
         ConsulKVPtr Get(const String &key);
-
         static void *Run(void *param);
-
         void Start();
-
         void Stop();
-
         void DoWatch();
-
         ~ConsulKVWatcher() {
             Stop();
         }

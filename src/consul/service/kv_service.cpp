@@ -11,6 +11,7 @@ namespace rtcfg::consul {
             result = std::make_shared<ConsulKVWatcher>(consul_client_, key);
             caches.InsertIfAbsent(key, result);
         }
+        result->Start();
         return result;
     }
 

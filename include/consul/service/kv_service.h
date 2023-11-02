@@ -16,7 +16,9 @@ namespace rtcfg::consul {
         SafeMap<String, ConsulKVWatcherPtr> caches;
     public:
         explicit ConsulKVService(ConsulClient &consul) : consul_client_(consul) {}
+        // get data from key-prefix
         String Get(const String &key, const SSMap &params = EMPTY_SS_MAP);
+        // cache key-prefix data, return watcher
         ConsulKVWatcherPtr Cache(const String &key);
         void DiscardCache(const String &key);
         void Subscribe(const String &key, Listener *listener);
