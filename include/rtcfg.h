@@ -8,7 +8,7 @@
 namespace rtcfg {
     class RTCFG {
     public:
-        static consul::Consul GetConsul(const SSMap &config);
+        static consul::Consul GetConsul(const SSMap &config = EMPTY_SS_MAP);
     };
 }
 

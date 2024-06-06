@@ -10,6 +10,9 @@
 #include "utils/safe_map.h"
 
 namespace rtcfg::consul {
+    /**
+     * Consul Kv watcher manager.
+     */
     class ConsulKVService {
     private:
         ConsulClient &consul_client_;

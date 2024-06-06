@@ -15,7 +15,9 @@ namespace rtcfg::consul {
         return result;
     }
 
-    void ConsulKVService::DiscardCache(const String &key) {}
+    void ConsulKVService::DiscardCache(const String &key) {
+        caches.Erase(key);
+    }
 
     void ConsulKVService::Subscribe(const String &key, Listener *listener) {}
 

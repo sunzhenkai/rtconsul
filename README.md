@@ -1,13 +1,12 @@
 # FEATURES
 - kv
-  - ✅ read kv
+  - ✅ read
 - service
-  - ✅ watch service
+  - ✅ watch 
 # TODO
 - service
-  - 🚂 register service
-  - 🚰 deregister service
-  - 🚰 service check
+  - 🚂 register / deregister
+  - 🚰 check
 
 # Usage
 ## kv

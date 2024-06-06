@@ -1,5 +1,4 @@
-#ifndef RTCFG_CONSTANTS_H
-#define RTCFG_CONSTANTS_H
+#pragma once
 
 #include "defines.h"
 
@@ -13,10 +12,8 @@ namespace rtcfg {
     extern const String CONSUL_KV_PREFIX;
     extern const String CONSUL_HEALTH_SERVICE;
 
-    extern const SSMap EMPTY_SS_MAP;
-    extern const SSMap CONSUL_KV_KEYS;
-    extern const SSMap CONSUL_KV_RECURSE;
+    extern const SSMap EMPTY_SS_MAP; // read prefix value
+    extern const SSMap CONSUL_KV_KEYS; // read keys
+    extern const SSMap CONSUL_KV_RECURSE; // read value recursive
 }
 
-
-#endif //RTCFG_CONSTANTS_H
