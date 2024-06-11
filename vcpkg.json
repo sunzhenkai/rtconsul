@@ -1,5 +1,5 @@
 {
-    "name": "vcpkg-base",
+    "name": "rtcfg",
     "version": "0.0.1",
     "dependencies": [
         "spdlog",
